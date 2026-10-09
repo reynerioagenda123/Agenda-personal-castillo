@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#123a63">
+<link rel="manifest" href="./manifest.webmanifest">
+<title>Agenda Castillo</title>
+<style>
+:root{--navy:#123a63;--blue:#2467a6;--sky:#dceffa;--ice:#f5faff;--gold:#c8a45d;--ink:#1e3347;--muted:#63788a;--line:#c6d9e7;--white:#fff}
+*{box-sizing:border-box}body{margin:0;background:var(--ice);color:var(--ink);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{background:linear-gradient(135deg,var(--navy),var(--blue));color:white;padding:18px 16px 16px;border-bottom:4px solid var(--gold)}
+.brand{display:flex;align-items:center;gap:12px}.mini-crest{width:54px;height:60px;flex:none}
+h1{font:700 23px/1.1 Georgia,serif;margin:0}header p{margin:6px 0 0;color:#e7f3fc;font-size:12px;letter-spacing:.08em}
+nav{display:flex;gap:7px;overflow:auto;padding:10px;background:white;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+nav button{border:1px solid var(--line);background:#fff;color:var(--navy);border-radius:20px;padding:9px 13px;white-space:nowrap;font-weight:650}
+nav button.active{background:var(--navy);color:white}
+main{max-width:850px;margin:auto;padding:14px 13px 90px}
+h2{font:700 21px Georgia,serif;color:var(--navy);margin:5px 0 12px}
+h3{font-size:15px;color:var(--navy);margin:12px 0 7px}
+.card{background:white;border:1px solid var(--line);border-radius:16px;padding:14px;margin:10px 0;box-shadow:0 3px 12px #123a630b}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row>*{flex:1;min-width:0}
+input,select,textarea{width:100%;border:1px solid #b7ccdc;border-radius:10px;padding:11px;background:#fff;color:var(--ink);font:inherit;margin:3px 0 8px}
+textarea{min-height:90px;resize:vertical}label{font-size:12px;font-weight:700;color:var(--muted)}
+button,.btn{border:0;border-radius:10px;background:var(--blue);color:white;padding:10px 13px;font:600 14px system-ui;cursor:pointer}
+button.secondary{background:var(--sky);color:var(--navy);border:1px solid var(--line)}button.danger{background:#9d3543}
+small,.muted{color:var(--muted)}.pill{display:inline-block;border-radius:30px;padding:4px 8px;background:var(--sky);color:var(--navy);font-size:11px;font-weight:700}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.stat{background:linear-gradient(150deg,#fff,#eaf5fc);border:1px solid var(--line);border-radius:14px;padding:12px}.stat strong{display:block;font-size:20px;color:var(--navy)}
+.item{border-bottom:1px solid #e3edf4;padding:10px 0;display:flex;gap:9px;align-items:flex-start}.item:last-child{border:0}.item .grow{flex:1}.item.done .grow{text-decoration:line-through;opacity:.55}
+.daygrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}.dayname{text-align:center;font-size:10px;font-weight:800;color:var(--muted);padding:5px 0}.day{min-height:45px;border:1px solid var(--line);background:white;border-radius:8px;padding:5px 2px;text-align:center;font-size:12px}.day.today{outline:2px solid var(--blue)}.day.selected{background:var(--navy);color:white}.day .dot{display:block;width:5px;height:5px;border-radius:50%;background:var(--gold);margin:3px auto 0}
+.monthhead{display:flex;align-items:center;justify-content:space-between;gap:8px}.monthhead button{padding:7px 11px}
+.check{width:auto;margin:4px 0}.empty{padding:16px;text-align:center;color:var(--muted);font-size:13px}
+footer{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);padding:8px 12px calc(8px + env(safe-area-inset-bottom));font-size:11px;color:var(--muted);text-align:center}
+.hidden{display:none!important}.money{font-variant-numeric:tabular-nums;font-weight:700;color:var(--navy)}.badge{font-size:11px;padding:3px 7px;border-radius:8px;background:#f4ead1;color:#775b1b}
+@media(min-width:650px){.stats{grid-template-columns:repeat(4,minmax(0,1fr))}main{padding-top:22px}.day{min-height:65px}}
+</style>
+</head>
+<body>
+<header>
+ <div class="brand">
+ <svg class="mini-crest" viewBox="0 0 100 115" aria-label="Escudo CASTILLO">
+  <path d="M17 24 L83 24 L78 70 Q72 91 50 101 Q28 91 22 70Z" fill="#0b2440" stroke="#c8a45d" stroke-width="3"/>
+  <path d="M23 31H77V53H23Z" fill="#2467a6" stroke="#c8a45d" stroke-width="1.5"/>
+  <path d="M31 49V39H39V34H45V49 M55 49V39H61V34H69V49" fill="#e9c775" stroke="#e9c775" stroke-width="2"/>
+  <path d="M43 70 Q50 57 57 70 L57 83 L43 83Z" fill="#c8a45d"/>
+  <path d="M27 17L31 7L39 15L50 2L61 15L69 7L73 17Z" fill="#c8a45d" stroke="#8e6a27" stroke-width="2"/>
+  <path d="M18 25L8 16L13 37L5 47L20 44 M82 25L92 16L87 37L95 47L80 44" fill="none" stroke="#c8a45d" stroke-width="4"/>
+  <text x="50" y="95" fill="#f3d78d" font-size="10" font-family="Georgia" font-weight="bold" text-anchor="middle">CASTILLO</text>
+ </svg>
+ <div><h1>AGENDA CASTILLO</h1><p>ORGANIZA · PLANIFICA · AVANZA</p></div>
+ </div>
+</header>
+<nav id="nav">
+<button class="active" data-tab="inicio">Inicio</button><button data-tab="calendario">Calendario</button><button data-tab="tareas">Tareas</button><button data-tab="notas">Notas</button><button data-tab="gastos">Gastos</button><button data-tab="deudas">Deudas</button><button data-tab="ahorro">Ahorro</button><button data-tab="ajustes">Datos</button>
+</nav>
+<main>
+<section id="inicio" class="pane">
+<h2>Tu espacio de organización</h2>
+<div class="card"><span class="pill" id="todayLabel"></span><h3>“Paso a paso también se llega lejos.”</h3><p class="muted">Una agenda clara para tus planes, tu tiempo y tus finanzas.</p><button onclick="showTab('tareas')">Ver mis tareas</button> <button class="secondary" onclick="showTab('gastos')">Registrar gasto</button></div>
+<div class="stats">
+<div class="stat"><small>Tareas pendientes</small><strong id="statTasks">0</strong></div>
+<div class="stat"><small>Gastos registrados</small><strong id="statExpenses">C$0</strong></div>
+<div class="stat"><small>Deuda pendiente</small><strong id="statDebt">C$0</strong></div>
+<div class="stat"><small>Ahorro acumulado</small><strong id="statSavings">C$0</strong></div>
+</div>
+<div class="card"><h3>Próximas tareas</h3><div id="homeTasks"></div></div>
+<div class="card"><h3>Privacidad</h3><p class="muted">Los datos se guardan en el almacenamiento local de este navegador en este dispositivo. No se suben a una cuenta ni se sincronizan automáticamente. Usa “Datos” para exportar una copia de respaldo.</p></div>
+</section>
+
+<section id="calendario" class="pane hidden">
+<h2>Calendario</h2><div class="card">
+<div class="monthhead"><button class="secondary" id="prevMonth">‹</button><strong id="monthTitle"></strong><button class="secondary" id="nextMonth">›</button></div>
+<div class="daygrid" id="calendarGrid"></div>
+<p class="muted">Toca un día para seleccionar la fecha de una tarea.</p>
+<label>Fecha seleccionada</label><input type="date" id="eventDate">
+<label>Actividad o recordatorio</label><input id="eventText" placeholder="Ej. pagar internet, cita, cumpleaños">
+<button onclick="addEvent()">Guardar recordatorio</button>
+<div id="eventsList"></div></div>
+</section>
+
+<section id="tareas" class="pane hidden">
+<h2>Tareas y prioridades</h2><div class="card">
+<label>Nombre de la tarea</label><input id="taskText" placeholder="¿Qué necesitas hacer?">
+<div class="row"><div><label>Fecha</label><input id="taskDate" type="date"></div><div><label>Prioridad</label><select id="taskPriority"><option>Normal</option><option>Alta</option><option>Baja</option></select></div></div>
+<button onclick="addTask()">Agregar tarea</button></div>
+<div class="card"><div class="row"><h3>Mi lista</h3><select id="taskFilter" onchange="renderTasks()"><option value="all">Todas</option><option value="open">Pendientes</option><option value="done">Completadas</option></select></div><div id="taskList"></div></div>
+</section>
+
+<section id="notas" class="pane hidden">
+<h2>Notas e ideas</h2><div class="card">
+<label>Título</label><input id="noteTitle" placeholder="Tema de la nota">
+<label>Contenido</label><textarea id="noteBody" placeholder="Escribe tus ideas aquí..."></textarea>
+<button onclick="addNote()">Guardar nota</button></div><div class="card"><h3>Notas guardadas</h3><div id="notesList"></div></div>
+</section>
+
+<section id="gastos" class="pane hidden">
+<h2>Control de gastos</h2><div class="card">
+<div class="row"><div><label>Tipo</label><select id="moneyType"><option value="gasto">Gasto</option><option value="ingreso">Ingreso</option></select></div><div><label>Fecha</label><input id="moneyDate" type="date"></div></div>
+<label>Concepto</label><input id="moneyConcept" placeholder="Ej. supermercado, salario">
+<div class="row"><div><label>Categoría</label><select id="moneyCategory"><option>Hogar</option><option>Alimentación</option><option>Transporte</option><option>Salud</option><option>Servicios</option><option>Trabajo</option><option>Personal</option><option>Otros</option></select></div><div><label>Monto (C$)</label><input id="moneyAmount" type="number" min="0" step="0.01" placeholder="0.00"></div></div>
+<button onclick="addMoney()">Guardar movimiento</button></div>
+<div class="stats"><div class="stat"><small>Ingresos</small><strong id="incomeTotal">C$0</strong></div><div class="stat"><small>Gastos</small><strong id="expenseTotal">C$0</strong></div><div class="stat"><small>Balance</small><strong id="balanceTotal">C$0</strong></div><div class="stat"><small>Movimientos</small><strong id="moneyCount">0</strong></div></div>
+<div class="card"><h3>Movimientos</h3><div id="moneyList"></div></div>
+</section>
+
+<section id="deudas" class="pane hidden">
+<h2>Deudas y pagos</h2><div class="card">
+<label>Persona o concepto</label><input id="debtName" placeholder="Nombre o motivo">
+<div class="row"><div><label>Deuda inicial (C$)</label><input id="debtOriginal" type="number" min="0" step=".01"></div><div><label>Saldo pendiente (C$)</label><input id="debtBalance" type="number" min="0" step=".01"></div></div>
+<div class="row"><div><label>Fecha de vencimiento</label><input id="debtDue" type="date"></div><div><label>Pago realizado (C$)</label><input id="debtPayment" type="number" min="0" step=".01" placeholder="0"></div></div>
+<button onclick="addDebt()">Guardar deuda / pago</button></div><div class="card"><h3>Mis compromisos</h3><div id="debtList"></div></div>
+</section>
+
+<section id="ahorro" class="pane hidden">
+<h2>Plan de ahorro</h2><div class="card">
+<label>Nombre de la meta</label><input id="goalName" placeholder="Ej. fondo de emergencia">
+<div class="row"><div><label>Meta total (C$)</label><input id="goalTarget" type="number" min="0" step=".01"></div><div><label>Aporte realizado (C$)</label><input id="goalContribution" type="number" min="0" step=".01"></div></div>
+<button onclick="addSaving()">Registrar aporte</button></div><div class="card"><h3>Mis metas</h3><div id="savingList"></div></div>
+</section>
+
+<section id="ajustes" class="pane hidden">
+<h2>Datos y respaldo</h2><div class="card"><h3>Guardar una copia de seguridad</h3><p class="muted">Exporta todos tus registros a un archivo JSON. Guárdalo en una carpeta segura.</p><button onclick="exportData()">Exportar mis datos</button>
+<h3>Restaurar una copia</h3><input type="file" id="importFile" accept=".json,application/json"><button class="secondary" onclick="importData()">Importar respaldo</button>
+<h3>Borrar todos los datos</h3><p class="muted">Esta acción no se puede deshacer. Exporta primero una copia si quieres conservarla.</p><button class="danger" onclick="clearData()">Borrar datos locales</button></div>
+<div class="card"><h3>Sobre esta agenda</h3><p>Agenda Castillo · Azul marino, azul rey, celeste y detalles dorados.</p><p class="muted">Para mantener tus datos, utiliza siempre el mismo navegador y evita borrar sus datos de sitio. La exportación periódica es recomendable.</p></div>
+</section>
+</main>
+<footer>AGENDA CASTILLO · Tus datos se guardan en este dispositivo</footer>
+<script>
+const KEY='agendaCastillo_v1';
+let db={tasks:[],notes:[],money:[],debts:[],savings:[],events:[]};
+function load(){try{const v=JSON.parse(localStorage.getItem(KEY)||'null');if(v)db={...db,...v}}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(db));renderAll()}catch(e){alert('No se pudo guardar. Exporta tus datos y prueba con otro navegador.');}}
+function id(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function money(n){return 'C$'+Number(n||0).toLocaleString('es-NI',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function today(){return new Date().toISOString().slice(0,10)}
+function showTab(tab){document.querySelectorAll('.pane').forEach(x=>x.classList.toggle('hidden',x.id!==tab));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.tab===tab));window.scrollTo(0,0);if(tab==='calendario')renderCalendar()}
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab)));
+function addTask(){let text=document.getElementById('taskText').value.trim();if(!text)return alert('Escribe una tarea.');db.tasks.unshift({id:id(),text,date:document.getElementById('taskDate').value,priority:document.getElementById('taskPriority').value,done:false});document.getElementById('taskText').value='';save()}
+function toggleTask(i){let t=db.tasks.find(x=>x.id===i);if(t)t.done=!t.done;save()}
+function del(arr,i){if(confirm('¿Eliminar este registro?')){db[arr]=db[arr].filter(x=>x.id!==i);save()}}
+function renderTasks(){let f=document.getElementById('taskFilter')?.value||'all';let list=db.tasks.filter(t=>f==='all'||(f==='open'&&!t.done)||(f==='done'&&t.done));document.getElementById('taskList').innerHTML=list.length?list.map(t=>`<div class="item ${t.done?'done':''}"><input class="check" type="checkbox" ${t.done?'checked':''} onchange="toggleTask('${t.id}')"><div class="grow"><b>${esc(t.text)}</b><br><small>${esc(t.date||'Sin fecha')} · ${esc(t.priority)}</small></div><button class="danger" onclick="del('tasks','${t.id}')">×</button></div>`).join(''):'<div class="empty">Aún no hay tareas.</div>';document.getElementById('homeTasks').innerHTML=db.tasks.filter(t=>!t.done).slice(0,4).map(t=>`<div class="item"><div class="grow">${esc(t.text)}<br><small>${esc(t.date||'Sin fecha')}</small></div></div>`).join('')||'<div class="empty">No tienes tareas pendientes. ¡Buen trabajo!</div>'}
+function addNote(){let title=document.getElementById('noteTitle').value.trim(),body=document.getElementById('noteBody').value.trim();if(!title&&!body)return alert('Escribe algo en la nota.');db.notes.unshift({id:id(),title,body,date:today()});document.getElementById('noteTitle').value='';document.getElementById('noteBody').value='';save()}
+function renderNotes(){document.getElementById('notesList').innerHTML=db.notes.length?db.notes.map(n=>`<div class="item"><div class="grow"><b>${esc(n.title||'Nota sin título')}</b><br><small>${esc(n.date)}</small><p>${esc(n.body).replace(/\n/g,'<br>')}</p></div><button class="danger" onclick="del('notes','${n.id}')">×</button></div>`).join(''):'<div class="empty">Tus notas aparecerán aquí.</div>'}
+function addMoney(){let concept=document.getElementById('moneyConcept').value.trim(),amount=Number(document.getElementById('moneyAmount').value);if(!concept||amount<=0)return alert('Indica el concepto y un monto mayor que cero.');db.money.unshift({id:id(),type:document.getElementById('moneyType').value,date:document.getElementById('moneyDate').value||today(),concept,category:document.getElementById('moneyCategory').value,amount});document.getElementById('moneyConcept').value='';document.getElementById('moneyAmount').value='';save()}
+function renderMoney(){let inc=db.money.filter(x=>x.type==='ingreso').reduce((a,x)=>a+x.amount,0),exp=db.money.filter(x=>x.type==='gasto').reduce((a,x)=>a+x.amount,0);document.getElementById('incomeTotal').textContent=money(inc);document.getElementById('expenseTotal').textContent=money(exp);document.getElementById('balanceTotal').textContent=money(inc-exp);document.getElementById('moneyCount').textContent=db.money.length;document.getElementById('moneyList').innerHTML=db.money.length?db.money.map(x=>`<div class="item"><div class="grow"><b>${esc(x.concept)}</b> <span class="pill">${esc(x.category)}</span><br><small>${esc(x.date)} · ${x.type==='ingreso'?'Ingreso':'Gasto'}</small></div><strong class="money">${x.type==='gasto'?'-':'+'}${money(x.amount)}</strong><button class="danger" onclick="del('money','${x.id}')">×</button></div>`).join(''):'<div class="empty">Aún no hay movimientos.</div>'}
+function addDebt(){let name=document.getElementById('debtName').value.trim(),original=Number(document.getElementById('debtOriginal').value),balance=Number(document.getElementById('debtBalance').value),payment=Number(document.getElementById('debtPayment').value||0);if(!name||balance<0||original<0)return alert('Completa el concepto y los montos.');db.debts.unshift({id:id(),name,original,balance:Math.max(0,balance-payment),due:document.getElementById('debtDue').value,payments:payment?[{date:today(),amount:payment}]:[]});document.getElementById('debtName').value='';document.getElementById('debtOriginal').value='';document.getElementById('debtBalance').value='';document.getElementById('debtPayment').value='';save()}
+function payDebt(i){let d=db.debts.find(x=>x.id===i);if(!d)return;let a=Number(prompt('¿Cuánto pagaste? (C$)'));if(!a||a<=0)return;d.balance=Math.max(0,d.balance-a);d.payments=d.payments||[];d.payments.push({date:today(),amount:a});save()}
+function renderDebts(){document.getElementById('debtList').innerHTML=db.debts.length?db.debts.map(d=>`<div class="item"><div class="grow"><b>${esc(d.name)}</b><br><small>Inicial: ${money(d.original)} · Vence: ${esc(d.due||'Sin fecha')}</small><br><span class="money">Pendiente: ${money(d.balance)}</span></div><button onclick="payDebt('${d.id}')">Abonar</button><button class="danger" onclick="del('debts','${d.id}')">×</button></div>`).join(''):'<div class="empty">No has registrado deudas.</div>'}
+function addSaving(){let name=document.getElementById('goalName').value.trim(),target=Number(document.getElementById('goalTarget').value),contribution=Number(document.getElementById('goalContribution').value||0);if(!name||target<=0)return alert('Escribe el nombre de la meta y un objetivo mayor que cero.');db.savings.unshift({id:id(),name,target,saved:contribution,history:contribution?[{date:today(),amount:contribution}]:[]});document.getElementById('goalName').value='';document.getElementById('goalTarget').value='';document.getElementById('goalContribution').value='';save()}
+function contribute(i){let g=db.savings.find(x=>x.id===i);if(!g)return;let a=Number(prompt('Monto del aporte (C$)'));if(!a||a<=0)return;g.saved+=a;g.history.push({date:today(),amount:a});save()}
+function renderSavings(){document.getElementById('savingList').innerHTML=db.savings.length?db.savings.map(g=>{let pct=Math.min(100,Math.round(g.saved/g.target*100));return `<div class="item"><div class="grow"><b>${esc(g.name)}</b><br><small>${money(g.saved)} de ${money(g.target)} · ${pct}%</small><div style="height:8px;background:#e4eef5;border-radius:10px;margin-top:7px"><div style="height:8px;width:${pct}%;background:#2467a6;border-radius:10px"></div></div></div><button onclick="contribute('${g.id}')">Aportar</button><button class="danger" onclick="del('savings','${g.id}')">×</button></div>`}).join(''):'<div class="empty">Agrega tu primera meta de ahorro.</div>'}
+let calDate=new Date(),selectedDate=today();
+function renderCalendar(){let y=calDate.getFullYear(),m=calDate.getMonth();document.getElementById('monthTitle').textContent=new Date(y,m,1).toLocaleDateString('es-NI',{month:'long',year:'numeric'});let first=(new Date(y,m,1).getDay()+6)%7,days=new Date(y,m+1,0).getDate(),html=['L','M','X','J','V','S','D'].map(d=>`<div class="dayname">${d}</div>`).join('');for(let i=0;i<first;i++)html+='<div></div>';for(let d=1;d<=days;d++){let date=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`,has=db.events.some(e=>e.date===date)||db.tasks.some(t=>t.date===date&&!t.done);html+=`<button class="day ${date===today()?'today':''} ${date===selectedDate?'selected':''}" onclick="selectDate('${date}')">${d}${has?'<span class="dot"></span>':''}</button>`}document.getElementById('calendarGrid').innerHTML=html;document.getElementById('eventDate').value=selectedDate;renderEvents()}
+function selectDate(d){selectedDate=d;renderCalendar()}
+function addEvent(){let date=document.getElementById('eventDate').value,text=document.getElementById('eventText').value.trim();if(!date||!text)return alert('Elige una fecha y escribe el recordatorio.');db.events.unshift({id:id(),date,text});document.getElementById('eventText').value='';save();renderCalendar()}
+function renderEvents(){let items=db.events.filter(e=>e.date===selectedDate);document.getElementById('eventsList').innerHTML='<h3>Recordatorios del '+esc(selectedDate)+'</h3>'+(items.length?items.map(e=>`<div class="item"><div class="grow">${esc(e.text)}</div><button class="danger" onclick="del('events','${e.id}')">×</button></div>`).join(''):'<div class="empty">No hay recordatorios para esta fecha.</div>')}
+function renderStats(){document.getElementById('statTasks').textContent=db.tasks.filter(t=>!t.done).length;document.getElementById('statExpenses').textContent=money(db.money.filter(x=>x.type==='gasto').reduce((a,x)=>a+x.amount,0));document.getElementById('statDebt').textContent=money(db.debts.reduce((a,x)=>a+x.balance,0));document.getElementById('statSavings').textContent=money(db.savings.reduce((a,x)=>a+x.saved,0))}
+function renderAll(){renderTasks();renderNotes();renderMoney();renderDebts();renderSavings();renderStats();if(!document.getElementById('calendario').classList.contains('hidden'))renderCalendar()}
+function exportData(){let blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='respaldo_agenda_castillo.json';a.click();URL.revokeObjectURL(a.href)}
+function importData(){let f=document.getElementById('importFile').files[0];if(!f)return alert('Selecciona primero un archivo de respaldo.');let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!confirm('Esto reemplazará los datos actuales. ¿Continuar?'))return;db={...db,...x};save();alert('Respaldo restaurado.')}catch(e){alert('El archivo no parece ser un respaldo válido.')}};r.readAsText(f)}
+function clearData(){if(confirm('¿Seguro que quieres borrar todos los datos de esta agenda?')){db={tasks:[],notes:[],money:[],debts:[],savings:[],events:[]};save()}}
+document.getElementById('prevMonth').onclick=()=>{calDate.setMonth(calDate.getMonth()-1);renderCalendar()};document.getElementById('nextMonth').onclick=()=>{calDate.setMonth(calDate.getMonth()+1);renderCalendar()};
+document.getElementById('todayLabel').textContent=new Date().toLocaleDateString('es-NI',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+['taskDate','moneyDate'].forEach(x=>document.getElementById(x).value=today());document.getElementById('eventDate').value=today();load();renderAll();renderCalendar();
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) { window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{})); }
+</script>
+</body>
+</html>

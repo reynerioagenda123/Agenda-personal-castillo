@@ -1,0 +1,9 @@
+{
+  "name": "Agenda Castillo",
+  "short_name": "Castillo",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#F5FAFF",
+  "theme_color": "#123A63",
+  "description": "Agenda personal azul con calendario, tareas, notas y finanzas."
+}

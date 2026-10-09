@@ -1,0 +1,25 @@
+AGENDA CASTILLO - PROTOTIPO WEB INSTALABLE
+
+Incluye:
+- Calendario mensual con recordatorios
+- Tareas con fecha y prioridad
+- Notas
+- Registro de ingresos y gastos en córdobas
+- Control de deudas y abonos
+- Metas de ahorro y aportes
+- Guardado local del navegador
+- Exportación e importación de respaldo JSON
+- Manifest y service worker para instalación PWA
+
+PARA USAR EN ANDROID:
+1. Descomprime este ZIP.
+2. Para probar rápidamente, abre index.html en Chrome. El guardado en modo archivo local puede variar según navegador.
+3. Para instalarla como aplicación (icono y modo independiente), publica los archivos en un alojamiento HTTPS. No basta con abrir el HTML desde Descargas, porque Android/Chrome exige un origen seguro para service workers.
+4. Abre la dirección HTTPS en Chrome Android > menú ⋮ > “Instalar aplicación” o “Añadir a pantalla principal”.
+5. Abre “Datos” dentro de la agenda y pulsa “Exportar mis datos” de vez en cuando.
+
+PRIVACIDAD:
+- Los registros se guardan en el almacenamiento local del navegador del dispositivo.
+- No hay cuenta ni sincronización automática entre dispositivos.
+- Si borras los datos del navegador puedes perder los registros. Guarda copias de respaldo.
+- Es un prototipo inicial y no incluye bloqueo con PIN.
